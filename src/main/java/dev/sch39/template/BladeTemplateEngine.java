@@ -2,13 +2,12 @@ package dev.sch39.template;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.View;
-import org.springframework.web.util.HtmlUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,33 +34,21 @@ public class BladeTemplateEngine implements View {
       reader.read(buffer);
       String content = new String(buffer);
 
-      if (model != null && model.size() > 0) {
-        content = this.doubleEncodeVariable(content, model);
-        content = this.withoutDoubleEncodeVariable(content, model);
+      try {
+        Lexer lexer = new Lexer(content);
+        List<Token> tokens = lexer.tokenize();
+        Visitor visitor = new Visitor(model);
+        StringBuilder output = new StringBuilder();
+        for (Token token : tokens) {
+          output.append(visitor
+              .visit(token));
+        }
+        response.getWriter().write(output.toString());
+
+      } catch (IllegalArgumentException e) {
+        response.getWriter().write("<h1>Error in template syntax: " + e.getMessage() + "</h1>");
       }
-
-      response.getWriter().write(content);
     }
-  }
-
-  private String doubleEncodeVariable(String templateContent, Map<String, ?> model) {
-    for (Entry<String, ?> entry : model.entrySet()) {
-      String placeholder = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}\\}";
-      templateContent = templateContent.replaceAll(placeholder.trim(),
-          entry.getValue() != null ? HtmlUtils.htmlEscape(entry.getValue().toString()) : "");
-    }
-
-    return templateContent;
-  }
-
-  private String withoutDoubleEncodeVariable(String templateContent, Map<String, ?> model) {
-    for (Entry<String, ?> entry : model.entrySet()) {
-      String placeholder = "\\{!!\\s*" + entry.getKey() + "\\s*!!\\}";
-      templateContent = templateContent.replaceAll(placeholder.trim(),
-          entry.getValue() != null ? entry.getValue().toString() : "");
-    }
-
-    return templateContent;
   }
 
 }
