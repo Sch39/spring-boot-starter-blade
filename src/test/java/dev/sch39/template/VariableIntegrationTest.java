@@ -13,12 +13,12 @@ import static org.hamcrest.Matchers.containsString;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TemplateEngineIntegrationTest {
+public class VariableIntegrationTest {
   @Autowired
   private MockMvc mockMvc;
 
   @Test
-  public void testVariabel() throws Exception {
+  public void testEscapeHtml() throws Exception {
     mockMvc.perform(get("/variable/escape"))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("Hello: &lt;br&gt;world!")))
