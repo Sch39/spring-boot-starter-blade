@@ -14,3 +14,6 @@ This template engine only read template with `.blade.html` file.
 
 ## Syntax
 - "{{ variableName }}" to replace variabel
+
+## Example
+Example how to used are in `src/main/java/dev/sch39/controllers/` for how to passed variable/data and template in `src/main/resources/templates/`
