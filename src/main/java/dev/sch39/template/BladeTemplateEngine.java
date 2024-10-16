@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.View;
+import org.springframework.web.util.HtmlUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,19 +36,20 @@ public class BladeTemplateEngine implements View {
       String content = new String(buffer);
 
       if (model != null && model.size() > 0) {
-        content = this.replaceVariables(content, model);
+        content = this.doubleEncodeVariable(content, model);
       }
 
       response.getWriter().write(content);
     }
   }
 
-  private String replaceVariables(String templateContent, Map<String, ?> model) {
+  private String doubleEncodeVariable(String templateContent, Map<String, ?> model) {
     for (Entry<String, ?> entry : model.entrySet()) {
       String placeholder = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}\\}";
       templateContent = templateContent.replaceAll(placeholder.trim(),
-          entry.getValue() != null ? entry.getValue().toString() : "");
+          entry.getValue() != null ? HtmlUtils.htmlEscape(entry.getValue().toString()) : "");
     }
+
     return templateContent;
   }
 
