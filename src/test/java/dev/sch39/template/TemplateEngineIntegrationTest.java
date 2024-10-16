@@ -20,6 +20,6 @@ public class TemplateEngineIntegrationTest {
   public void testVariabel() throws Exception {
     mockMvc.perform(get("/"))
         .andExpect(status().isOk())
-        .andExpect(content().string("<h1>Hello World!</h1>"));
+        .andExpect(content().string("<h1>Hello World!</h1>\n<h1>Age 25</h1>"));
   }
 }
