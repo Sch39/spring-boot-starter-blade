@@ -3,6 +3,7 @@ package dev.sch39.template;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -29,16 +30,12 @@ public class BladeTemplateEngine implements View {
       throws Exception {
     File file = new File(viewPath);
     try (FileReader reader = new FileReader(file)) {
-      // Render sederhana
       char[] buffer = new char[(int) file.length()];
       reader.read(buffer);
       String content = new String(buffer);
 
-      // Parsing variable (mirip Blade di Laravel)
       if (model != null && model.size() > 0) {
-        for (Map.Entry<String, ?> entry : model.entrySet()) {
-          content = content.replace("{{ " + entry.getKey() + " }}", entry.getValue().toString());
-        }
+        content = this.replaceVariables(content, model);
       }
 
       response.getWriter().write(content);
@@ -60,15 +57,14 @@ public class BladeTemplateEngine implements View {
   // return templateContent;
   // }
 
-  // private String replaceVariables(String templateContent, Map<String, Object>
-  // model) {
-  // for (Map.Entry<String, Object> entry : model.entrySet()) {
-  // String placeholder = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}\\}";
-  // templateContent = templateContent.replaceAll(placeholder.trim(),
-  // entry.getValue() != null ? entry.getValue().toString() : "");
-  // }
-  // return templateContent;
-  // }
+  private String replaceVariables(String templateContent, Map<String, ?> model) {
+    for (Entry<String, ?> entry : model.entrySet()) {
+      String placeholder = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}\\}";
+      templateContent = templateContent.replaceAll(placeholder.trim(),
+          entry.getValue() != null ? entry.getValue().toString() : "");
+    }
+    return templateContent;
+  }
 
   // private String processControlFlow(String templateContent, Map<String, Object>
   // model) {
