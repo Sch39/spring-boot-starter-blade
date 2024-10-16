@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class VariableController {
   @GetMapping("/escape")
   public ModelAndView variable() {
-    ModelAndView view = new ModelAndView("variable");
+    ModelAndView view = new ModelAndView("variableEscapeHtml");
     view.addObject("name", "<br>world");
     view.addObject("age", "<h1>29</h1>");
     view.addObject("gender", "male");
