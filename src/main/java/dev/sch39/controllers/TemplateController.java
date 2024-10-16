@@ -8,9 +8,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class TemplateController {
   @GetMapping("/")
   public ModelAndView home() {
-    ModelAndView view = new ModelAndView("test1");
+    ModelAndView view = new ModelAndView("variable");
     view.addObject("name", "World");
+    view.addObject("age", 25);
     return view;
   }
 
+  @GetMapping("/conditional")
+  public ModelAndView conditional() {
+    ModelAndView view = new ModelAndView("conditional");
+    view.addObject("conditional", true);
+    return view;
+  }
 }
