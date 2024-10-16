@@ -26,4 +26,13 @@ public class VariableIntegrationTest {
         .andExpect(content().string(containsString("Gender: male")))
         .andExpect(content().string(containsString("&lt;script&gt;alert(&#39;XSS&#39;);&lt;/script&gt;")));
   }
+
+  @Test
+  public void testNonEscapeHtml() throws Exception {
+    mockMvc.perform(get("/variable/non-escape"))
+        .andExpect(content().string(containsString("Hello: <br>world!")))
+        .andExpect(content().string(containsString("Age: <h1>29</h1>")))
+        .andExpect(content().string(containsString("Gender: male")))
+        .andExpect(content().string(containsString("<script>alert('XSS');</script>")));
+  }
 }

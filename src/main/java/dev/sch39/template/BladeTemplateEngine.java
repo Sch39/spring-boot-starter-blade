@@ -37,6 +37,7 @@ public class BladeTemplateEngine implements View {
 
       if (model != null && model.size() > 0) {
         content = this.doubleEncodeVariable(content, model);
+        content = this.withoutDoubleEncodeVariable(content, model);
       }
 
       response.getWriter().write(content);
@@ -48,6 +49,16 @@ public class BladeTemplateEngine implements View {
       String placeholder = "\\{\\{\\s*" + entry.getKey() + "\\s*\\}\\}";
       templateContent = templateContent.replaceAll(placeholder.trim(),
           entry.getValue() != null ? HtmlUtils.htmlEscape(entry.getValue().toString()) : "");
+    }
+
+    return templateContent;
+  }
+
+  private String withoutDoubleEncodeVariable(String templateContent, Map<String, ?> model) {
+    for (Entry<String, ?> entry : model.entrySet()) {
+      String placeholder = "\\{!!\\s*" + entry.getKey() + "\\s*!!\\}";
+      templateContent = templateContent.replaceAll(placeholder.trim(),
+          entry.getValue() != null ? entry.getValue().toString() : "");
     }
 
     return templateContent;
