@@ -13,11 +13,4 @@ public class TemplateController {
     view.addObject("age", 25);
     return view;
   }
-
-  @GetMapping("/conditional")
-  public ModelAndView conditional() {
-    ModelAndView view = new ModelAndView("conditional");
-    view.addObject("conditional", true);
-    return view;
-  }
 }
