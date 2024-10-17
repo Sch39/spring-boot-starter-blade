@@ -27,4 +27,12 @@ public class VariableController {
     view.addObject("unsafeVariable", "<script>alert('XSS');</script>");
     return view;
   }
+
+  @GetMapping("/unclosed-escape")
+  public ModelAndView unclosedEscape() {
+    ModelAndView view = new ModelAndView("variableWithUnclosedSyntax");
+    view.addObject("errMessage", "it's should be error!");
+    return view;
+  }
+
 }

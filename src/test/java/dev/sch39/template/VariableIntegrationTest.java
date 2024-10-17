@@ -35,4 +35,11 @@ public class VariableIntegrationTest {
         .andExpect(content().string(containsString("Gender: male")))
         .andExpect(content().string(containsString("<script>alert('XSS');</script>")));
   }
+
+  @Test
+  public void testUnclosedEscapeHtml() throws Exception {
+    mockMvc.perform(get("/variable/unclosed-escape"))
+        .andExpect(content()
+            .string(containsString("Error in template syntax: Unclosed variable token '{{' at line 2, column 1")));
+  }
 }
