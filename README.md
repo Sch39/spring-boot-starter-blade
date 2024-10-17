@@ -6,7 +6,8 @@ Is template engine to use blade syntax on spring boot.
 ### Features
 - Display data with escape [v]
 - Display data with non-escape/passing raw html [v]
-- Refactor code and use lexer, parser and visitor pattern [ ]
+- Refactor code and use lexer, parser and visitor pattern [v]
+- Track syntax error in template [v]
 - Comment syntax [ ]
 - @if, @ifelse, @else and @endif [ ]
 - switch case [ ]
